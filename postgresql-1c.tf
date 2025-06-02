@@ -7,7 +7,7 @@
 locals {
   zone_a_v4_cidr_blocks = "10.1.0.0/16" # Set the CIDR block for subnet in the ru-central1-a availability zone.
   zone_b_v4_cidr_blocks = "10.2.0.0/16" # Set the CIDR block for subnet in the ru-central1-b availability zone.
-  zone_c_v4_cidr_blocks = "10.3.0.0/16" # Set the CIDR block for subnet in the ru-central1-c availability zone.
+  zone_d_v4_cidr_blocks = "10.3.0.0/16" # Set the CIDR block for subnet in the ru-central1-d availability zone.
   cluster_name          = ""            # Set a PostgreSQL 1C cluster name.
   pg_version            = ""            # Set a PostgreSQL 1C version.
   db_name               = ""            # Set a database name.
@@ -36,12 +36,12 @@ resource "yandex_vpc_subnet" "subnet-b" {
   v4_cidr_blocks = [local.zone_b_v4_cidr_blocks]
 }
 
-resource "yandex_vpc_subnet" "subnet-c" {
-  description    = "Subnet in the ru-central1-c availability zone"
-  name           = "postgresql-subnet-c"
-  zone           = "ru-central1-c"
+resource "yandex_vpc_subnet" "subnet-d" {
+  description    = "Subnet in the ru-central1-d availability zone"
+  name           = "postgresql-subnet-d"
+  zone           = "ru-central1-d"
   network_id     = yandex_vpc_network.postgresql-1c-network.id
-  v4_cidr_blocks = [local.zone_c_v4_cidr_blocks]
+  v4_cidr_blocks = [local.zone_d_v4_cidr_blocks]
 }
 
 resource "yandex_vpc_security_group" "postgresql-security-group" {
@@ -84,8 +84,8 @@ resource "yandex_mdb_postgresql_cluster" "postgresql-1c" {
   }
 
   host {
-    zone             = "ru-central1-c"
-    subnet_id        = yandex_vpc_subnet.subnet-c.id
+    zone             = "ru-central1-d"
+    subnet_id        = yandex_vpc_subnet.subnet-d.id
     assign_public_ip = true # Required for connection from the Internet.
   }
 }
